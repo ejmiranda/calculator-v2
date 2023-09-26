@@ -9,5 +9,5 @@
 - Create a basic calculator.
 - Work with integers and floating point numbers.
 - Support operation chaining and keyboard input.
-- Implement `Clear`, `+/-`, `%`.
+- Implement `AC/C`, `+/-`, `%`.
 - iOS calculator style (2023).
