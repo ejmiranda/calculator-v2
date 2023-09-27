@@ -23,37 +23,33 @@ function setCalculation(event) {
         n1 += key.textContent;
         n2 = n1;
         displayText.textContent = n1;
-        updateLog();
       } else if (state === 'sign') {
         state = 'post-sign';
         deselectKeys();
         n2 = key.textContent;
         displayText.textContent = n2;
-        updateLog();
       } else if (state === 'post-sign') {
         n2 += key.textContent;
         displayText.textContent = n2;
-        updateLog();
       }
       break;
     case 'sign':
       if ((state === 'pre-sign' || state === 'sign') && key.getAttribute('id') !== 'equal') {
         state = 'sign';
+        deselectKeys();
         sign = key.textContent;
         n2 = n1;
-        deselectKeys();
         key.classList.add('selected');
-        updateLog();
       } else if (state === 'post-sign' || key.getAttribute('id') === 'equal') {
         state = 'pre-sign';
         deselectKeys();
         result = calc.calculate(n1, sign, n2);
         n1 = result;
         displayText.textContent = result;
-        updateLog();
       }
-      break;
+    break;
   }
+  updateLog();
 }
 
 function updateLog() {
