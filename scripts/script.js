@@ -20,6 +20,7 @@ function setCalculation(event) {
       console.log('Special Function');
       break;
     case 'number':
+
       // The user can only add one dot per operand.
       if (key.getAttribute('id') === 'dot') {
         if (hasDot) {
@@ -27,6 +28,7 @@ function setCalculation(event) {
         } 
         hasDot = true;
       }
+
       if (state === 'pre-sign') {
         if (n1 === '0' && hasDot === false) {
           n1 = '';
@@ -37,12 +39,14 @@ function setCalculation(event) {
       } else if (state === 'sign') {
         state = 'post-sign';
         deselectKeys();
+
         // Only true when dot is pressed after the sign
         if (hasDot === true) {
           n2 = `0${key.textContent}`;
         } else {
           n2 = key.textContent;
         }
+        
         displayText.textContent = n2;
       } else if (state === 'post-sign') {
         n2 += key.textContent;
