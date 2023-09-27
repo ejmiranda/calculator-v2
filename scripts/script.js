@@ -1,14 +1,15 @@
 const displayText = document.getElementById('display-text');
-const buttons = document.querySelectorAll('button');
+const keys = document.querySelectorAll('button');
 
-let state = 'pre-sign'; // 'sign', 'post-sign' 
+let state = 'pre-sign'; // ,'sign' and 'post-sign'.
 let n1 = '';
 let sign = '';
 let n2 = '';
-let result = 0;
+let result = '';
+let calc = new Calculator();
 
-buttons.forEach(button => {
-  button.addEventListener('click', setCalculation);
+keys.forEach(key => {
+  key.addEventListener('click', setCalculation);
 });
 
 function setCalculation(event) {
@@ -25,7 +26,7 @@ function setCalculation(event) {
         updateLog();
       } else if (state === 'sign') {
         state = 'post-sign';
-        deselectOperators();
+        deselectKeys();
         n2 = key.textContent;
         displayText.textContent = n2;
         updateLog();
@@ -36,14 +37,20 @@ function setCalculation(event) {
       }
       break;
     case 'sign':
-      if (state === 'pre-sign' || state === 'sign') {
+      if ((state === 'pre-sign' || state === 'sign') && key.getAttribute('id') !== 'equal') {
         state = 'sign';
         sign = key.textContent;
-        deselectOperators();
+        n2 = n1;
+        deselectKeys();
         key.classList.add('selected');
         updateLog();
-      } else {
-        
+      } else if (state === 'post-sign' || key.getAttribute('id') === 'equal') {
+        state = 'pre-sign';
+        deselectKeys();
+        result = calc.calculate(n1, sign, n2);
+        n1 = result;
+        displayText.textContent = result;
+        updateLog();
       }
       break;
   }
@@ -51,15 +58,15 @@ function setCalculation(event) {
 
 function updateLog() {
   console.log(`state = \'${state}\'`);
-  console.log(`n1 = ${n1}`);
-  console.log(`sign is ${sign}`);
-  console.log(`n2 = ${n2}`);
+  console.log(`n1 = \'${n1}\'`);
+  console.log(`sign is \'${sign}\'`);
+  console.log(`n2 = \'${n2}\'`);
 }
 
-function deselectOperators() {
-  buttons.forEach(button => {
-    if (button.classList.contains('selected')) {
-      button.classList.remove('selected');
+function deselectKeys() {
+  keys.forEach(key => {
+    if (key.classList.contains('selected')) {
+      key.classList.remove('selected');
     }
   });
 }
