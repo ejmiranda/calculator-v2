@@ -3,7 +3,7 @@ const buttons = document.querySelectorAll('button');
 
 buttons.forEach(button => {
   button.addEventListener('click', () => {
-    displayText.textContent = button.getAttribute('id');
+    displayText.textContent = button.textContent;
   });
 });
 
@@ -22,11 +22,3 @@ function Calculator() {
     return result;
   }
 }
-
-let calc = new Calculator();
-console.log(calc.calculate(2, '+', 2));
-console.log(calc.calculate(5, '-', 2));
-console.log(calc.calculate(5, 'x', 10));
-console.log(calc.calculate(50, '÷', 2));
-console.log(calc.calculate(9, '%'));
-console.log(calc.calculate(100, '+/-'));
