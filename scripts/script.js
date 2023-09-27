@@ -2,10 +2,11 @@ const displayText = document.getElementById('display-text');
 const keys = document.querySelectorAll('button');
 
 let state = 'pre-sign'; // ,'sign' and 'post-sign'.
-let n1 = '';
+let n1 = '0';
 let sign = '';
-let n2 = '';
+let n2 = '0';
 let result = '';
+let hasDot = false;
 let calc = new Calculator();
 
 keys.forEach(key => {
@@ -19,14 +20,29 @@ function setCalculation(event) {
       console.log('Special Function');
       break;
     case 'number':
+      // The user can only add one dot per operand.
+      if (key.getAttribute('id') === 'dot') {
+        if (hasDot) {
+          break;
+        } 
+        hasDot = true;
+      }
       if (state === 'pre-sign') {
+        if (n1 === '0' && hasDot === false) {
+          n1 = '';
+        }
         n1 += key.textContent;
         n2 = n1;
         displayText.textContent = n1;
       } else if (state === 'sign') {
         state = 'post-sign';
         deselectKeys();
-        n2 = key.textContent;
+        // Only true when dot is pressed after the sign
+        if (hasDot === true) {
+          n2 = `0${key.textContent}`;
+        } else {
+          n2 = key.textContent;
+        }
         displayText.textContent = n2;
       } else if (state === 'post-sign') {
         n2 += key.textContent;
@@ -39,6 +55,7 @@ function setCalculation(event) {
         deselectKeys();
         sign = key.textContent;
         n2 = n1;
+        hasDot = false;
         key.classList.add('selected');
       } else if (state === 'post-sign' || key.getAttribute('id') === 'equal') {
         state = 'pre-sign';
