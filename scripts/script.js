@@ -47,16 +47,24 @@ function setCalculation(event) {
         n1 = result;
         displayText.textContent = result;
       }
-    break;
+      break;
   }
   updateLog();
 }
 
-function updateLog() {
-  console.log(`state = \'${state}\'`);
-  console.log(`n1 = \'${n1}\'`);
-  console.log(`sign is \'${sign}\'`);
-  console.log(`n2 = \'${n2}\'`);
+function clear(type) {
+  switch (type) {
+    case 'C': //Clear
+      break;
+    case 'AC': //All Clear
+      state = 'pre-sign';
+      n1 = '';
+      sign = '';
+      n2 = '';
+      result = '';
+      deselectKeys();
+      break;
+  }
 }
 
 function deselectKeys() {
@@ -67,8 +75,14 @@ function deselectKeys() {
   });
 }
 
-function Calculator() {
+function updateLog() {
+  console.log(`state = \'${state}\'`);
+  console.log(`n1 = \'${n1}\'`);
+  console.log(`sign is \'${sign}\'`);
+  console.log(`n2 = \'${n2}\'`);
+}
 
+function Calculator() {
   this.operations = {
     '+': (n1, n2) => n1 + n2,
     '-': (n1, n2) => n1 - n2,
@@ -77,11 +91,9 @@ function Calculator() {
     '%': (n1) => n1 / 100,
     '+/-': (n1) => n1 * -1,
   }
-
   this.calculate = (n1, sign, n2) => {
     let result = '';
     result = this.operations[sign](+n1, +n2)
     return result;
   }
-
 }
