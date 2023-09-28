@@ -1,23 +1,53 @@
 const displayText = document.getElementById('display-text');
 const keys = document.querySelectorAll('button');
 
-let state = 'pre-sign'; // ,'sign' and 'post-sign'.
-let n1 = '0';
-let sign = '';
-let n2 = '0';
-let result = '';
-let hasDot = false;
+let state; // 'pre-sign','sign' and 'post-sign'.
+let n1;
+let sign;
+let n2;
+let result;
+let hasDot;
 let calc = new Calculator();
+
+window.addEventListener('load', clear('AC'));
 
 keys.forEach(key => {
   key.addEventListener('click', setCalculation);
 });
 
+function clear(type) {
+  switch (type) {
+    case 'C': //Clear
+      break;
+    case 'AC': //All Clear
+      state = 'pre-sign';
+      n1 = '0';
+      sign = '';
+      n2 = '0';
+      result = '';
+      hasDot = false;
+      deselectKeys();
+      displayText.textContent = n1;
+      break;
+  }
+}
+
 function setCalculation(event) {
   let key = event.target;
   switch(key.classList[0]) {
     case 'special-function':
-      console.log('Special Function');
+      switch(key.getAttribute('id')) {
+        case 'clear':
+          console.log(key.textContent);
+          clear(key.textContent);
+          break;
+        case 'pos-neg':
+          
+          break;
+        case 'percentage':
+          
+          break;
+      }
       break;
     case 'number':
 
@@ -71,21 +101,6 @@ function setCalculation(event) {
       break;
   }
   updateLog();
-}
-
-function clear(type) {
-  switch (type) {
-    case 'C': //Clear
-      break;
-    case 'AC': //All Clear
-      state = 'pre-sign';
-      n1 = '';
-      sign = '';
-      n2 = '';
-      result = '';
-      deselectKeys();
-      break;
-  }
 }
 
 function deselectKeys() {
