@@ -87,8 +87,7 @@ function setCalculation(event) {
           break;
         case 'post-sign':
           hasDot = false;
-          let calc = new Calculator();
-          result = calc.calculate(n1, sign, n2);
+          result = getCalculation(n1, sign, n2);
           if (key.getAttribute('id') === 'equal') {
             deselectKeys();
             state = 'new';
@@ -111,7 +110,18 @@ function setCalculation(event) {
           
           break;
         case 'percentage':
-          
+          switch(state) {
+            case 'new': 
+            case 'pre-sign':
+              result = getCalculation(n1, key.textContent);
+              n1 = result;
+            case 'sign':
+              break;
+            case 'post-sign':
+              result = getCalculation(n2, key.textContent);
+              n2 = result;
+          }
+          display.textContent = result;
           break;
       }
       break;
@@ -149,6 +159,11 @@ function Calculator() {
     result = this.operations[sign](+n1, +n2)
     return result;
   }
+}
+
+function getCalculation(n1, sign, n2) {
+  let calc = new Calculator();
+  return calc.calculate(n1, sign, n2);
 }
 
 function deselectKeys() {
