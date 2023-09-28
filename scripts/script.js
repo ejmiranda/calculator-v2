@@ -30,6 +30,11 @@ function setCalculation(event) {
         hasDot = true;
       }
 
+      // No multiple zeros before decimal point
+      if ((key.textContent === '0') && !hasDot) {
+        break;
+      }
+
       switch(state) {
         case 'new':
           if (key.getAttribute('id') === 'dot') {
