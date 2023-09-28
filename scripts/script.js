@@ -17,6 +17,7 @@ keys.forEach(key => {
 
 function setCalculation(event) {
   let key = event.target;
+  console.log(`key = \'${key.textContent}\'`);
   let keyType = key.classList[0];
   switch(keyType) {
     case 'number':
@@ -74,8 +75,8 @@ function setCalculation(event) {
       }
 
       switch(state) {
-        case 'new': 
-          break;
+        case 'new':   
+          if (sign === '') break;
         case 'pre-sign':
           state = 'sign';
           // Rollover to 'sign'
@@ -85,13 +86,18 @@ function setCalculation(event) {
           selectKey(sign);
           break;
         case 'post-sign':
-          deselectKeys();
           hasDot = false;
           let calc = new Calculator();
           result = calc.calculate(n1, sign, n2);
-          // n1 = result;
+          if (key.getAttribute('id') === 'equal') {
+            deselectKeys();
+            state = 'new';
+          } else {
+            selectKey(sign);
+            state = 'sign';
+          }
+          n1 = result;
           display.textContent = result;
-          state = 'new';
           break;
       }
       break;
@@ -119,7 +125,6 @@ function setCalculation(event) {
       //     break;
       // }
   }
-  console.log(`key = \'${key.textContent}\'`);
   console.log(`state = \'${state}\'`);
   console.log(`n1 = \'${n1}\'`);
   console.log(`sign is \'${sign}\'`);
