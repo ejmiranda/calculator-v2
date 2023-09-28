@@ -113,8 +113,8 @@ function Calculator() {
     '+/-': (n1) => n1 * -1,
   }
   this.calculate = (n1, sign, n2) => {
-    let result = '';
+    let result = 0;
     result = this.operations[sign](+n1, +n2)
-    return result;
+    return result.toFixed(1);
   }
 }
