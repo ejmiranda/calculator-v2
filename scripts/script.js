@@ -1,5 +1,6 @@
 const displayText = document.getElementById('display-text');
 const keys = document.querySelectorAll('button');
+const clearKey = document.getElementById('clear');
 
 let state; // 'pre-sign','sign' and 'post-sign'.
 let n1;
@@ -18,6 +19,20 @@ keys.forEach(key => {
 function clear(type) {
   switch (type) {
     case 'C': //Clear
+      switch(state) {
+        case 'pre-sign':
+          n1 = '0';
+          break;
+        // What happens on 'sign' gets taken care of by the code before the breaks in this and the outer switch.
+        case 'sign': 
+          break;
+        case 'post-sign':
+          state = 'sign';
+          n2 = '0';
+          selectDeselectKeys(sign);
+          break;
+      }
+      clearKey.textContent = 'AC'
       break;
     case 'AC': //All Clear
       state = 'pre-sign';
@@ -26,10 +41,10 @@ function clear(type) {
       n2 = '0';
       result = '';
       hasDot = false;
-      deselectKeys();
-      displayText.textContent = n1;
+      selectDeselectKeys();
       break;
   }
+  displayText.textContent = '0';
 }
 
 function setCalculation(event) {
@@ -38,7 +53,6 @@ function setCalculation(event) {
     case 'special-function':
       switch(key.getAttribute('id')) {
         case 'clear':
-          console.log(key.textContent);
           clear(key.textContent);
           break;
         case 'pos-neg':
@@ -50,6 +64,8 @@ function setCalculation(event) {
       }
       break;
     case 'number':
+      // The only keys that change AC -> C are the numbers
+      clearKey.textContent = 'C';
 
       // The user can only add one dot per operand.
       if (key.getAttribute('id') === 'dot') {
@@ -68,7 +84,7 @@ function setCalculation(event) {
         displayText.textContent = n1;
       } else if (state === 'sign') {
         state = 'post-sign';
-        deselectKeys();
+        selectDeselectKeys();
 
         // Only true when dot is pressed after the sign
         if (hasDot === true) {
@@ -86,14 +102,14 @@ function setCalculation(event) {
     case 'sign':
       if ((state === 'pre-sign' || state === 'sign') && key.getAttribute('id') !== 'equal') {
         state = 'sign';
-        deselectKeys();
+        selectDeselectKeys();
         sign = key.textContent;
         n2 = n1;
         hasDot = false;
         key.classList.add('selected');
       } else if (state === 'post-sign' || key.getAttribute('id') === 'equal') {
         state = 'pre-sign';
-        deselectKeys();
+        selectDeselectKeys();
         result = calc.calculate(n1, sign, n2);
         n1 = result;
         displayText.textContent = result;
@@ -103,10 +119,16 @@ function setCalculation(event) {
   updateLog();
 }
 
-function deselectKeys() {
+function selectDeselectKeys(sign) {
   keys.forEach(key => {
-    if (key.classList.contains('selected')) {
-      key.classList.remove('selected');
+    if (sign === undefined) { // No param = Deselect all
+      if (key.classList.contains('selected')) {
+        key.classList.remove('selected');
+      }
+    } else { // Select key === sign
+      if (key.textContent === sign) {
+        key.classList.add('selected');
+      }
     }
   });
 }
