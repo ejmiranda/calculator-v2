@@ -93,6 +93,7 @@ function setCalculation(event) {
             deselectKeys();
             state = 'new';
           } else {
+            sign = key.textContent;
             selectKey(sign);
             state = 'sign';
           }
