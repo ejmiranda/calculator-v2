@@ -203,7 +203,11 @@ function Calculator() {
 
 function getCalculation(n1, sign, n2) {
   let calc = new Calculator();
-  let result = calc.calculate(n1, sign, n2); 
+  let decimalQty = Math.max(getDecimalQty(n1), getDecimalQty(n2));
+  let result = calc.calculate(n1, sign, n2);
+  if (decimalQty > 0) {
+    result = result.toFixed(decimalQty);
+  }
   if (result == 'Infinity' || isNaN(result)) {
     result = 'Error';
   }
@@ -236,6 +240,14 @@ function formatNumberString (nStr) {
 
   // Add the decimal part if it exists
   return `${integer}${point}${decimal}`;
+}
+
+function getDecimalQty(nStr) {
+  let qty = 0;
+  if (nStr != undefined && nStr.includes('.')) {
+    qty = nStr.slice(nStr.indexOf('.') + 1).length;
+  }
+  return qty;
 }
 
 function deselectKeys() {
