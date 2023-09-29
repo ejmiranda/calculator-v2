@@ -10,7 +10,7 @@
   #calculator {
     margin: 0 0 90px 0;
     position: fixed;
-    left: 5px;
+    left: 8px;
   }
 }
 
@@ -36,10 +36,13 @@ html {
 }
 
 #display {
+  background-color: yellow;
   padding: 10px 15px;
+  width: 330px;
 }
 
 #display-text {
+  background-color: green;
   color: white;
   font-size: 90px;
   text-align: right;
@@ -101,5 +104,6 @@ button {
   border-radius: 100px;
   height: 75px;
   margin: 6px;
+  touch-action: none;
   width: 75px;
 }
