@@ -77,7 +77,6 @@ function setCalculation(event) {
           } else if (key.textContent != '0' && n2.length === 1 && n2.slice(0,1) === '0') {
             n2 = '';
           }
-
           if (isNegative) {
             n2 = `-${n2}`;
           }
@@ -133,8 +132,21 @@ function setCalculation(event) {
           if (display.textContent === '0') {
             display.textContent = '-0';
             isNegative = true;
+          } else {
+            switch(state) {
+              case 'new': 
+              case 'pre-sign':
+                console.log(n1,key.textContent);
+                result = getCalculation(n1, key.textContent);
+                n1 = result;
+              case 'sign':
+                break;
+              case 'post-sign':
+                result = getCalculation(n2, key.textContent);
+                n2 = result;
+            }
+            display.textContent = result;
           }
-          
           break;
         case 'percentage':
           switch(state) {
@@ -173,11 +185,6 @@ function setCalculation(event) {
   console.log(`---------------`);
 }
 
-function getCalculation(n1, sign, n2) {
-  let calc = new Calculator();
-  return calc.calculate(n1, sign, n2);
-}
-
 function Calculator() {
   this.operations = {
     '+': (n1, n2) => n1 + n2,
@@ -192,6 +199,11 @@ function Calculator() {
     result = this.operations[sign](+n1, +n2)
     return result;
   }
+}
+
+function getCalculation(n1, sign, n2) {
+  let calc = new Calculator();
+  return calc.calculate(n1, sign, n2);
 }
 
 function deselectKeys() {
