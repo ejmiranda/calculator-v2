@@ -32,8 +32,12 @@ function setCalculation(event) {
       }
 
       // No multiple zeros before decimal point
-      if ((key.textContent === '0') && !hasDot) {
-        break;
+      if (key.textContent === '0') {
+        if ((state === 'new' || state === 'pre-sign') && n1.slice(0,1) === '0') break;
+        if (state === 'post-sign' && n2.slice(0,1) === '0') {
+          state = 'sign';
+          break;
+        }
       }
 
       switch(state) {
