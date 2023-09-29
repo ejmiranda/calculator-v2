@@ -81,7 +81,7 @@ function setCalculation(event) {
             n2 = `-${n2}`;
           }
           n2 += key.textContent;
-          display.textContent = n2;
+          display.textContent = formatNumberString(n2);
           break;
       }
       break;
@@ -119,7 +119,8 @@ function setCalculation(event) {
             state = 'sign';
           }
           n1 = result;
-          display.textContent = result;
+          console.log(typeof(result));
+          display.textContent = formatNumberString(result);
           break;
       }
       break;
@@ -145,7 +146,7 @@ function setCalculation(event) {
                 result = getCalculation(n2, key.textContent);
                 n2 = result;
             }
-            display.textContent = result;
+            display.textContent = formatNumberString(result);
           }
           break;
         case 'percentage':
@@ -162,7 +163,7 @@ function setCalculation(event) {
               n2 = result;
           }
           hasDot = hasDecimals(result);
-          display.textContent = result;
+          display.textContent = formatNumberString(result);
           break;
       }
       break;
@@ -210,12 +211,15 @@ function getCalculation(n1, sign, n2) {
 }
 
 function formatNumberString (nStr) {
+  nStr = nStr.toString();
   let isNegative = nStr.startsWith('-');
   let integer = (isNegative) ? nStr.slice(1) : nStr;
   let decimal = '';
+  let point = ''
 
   // Check for decimal point and split the string if found
   if (integer.includes('.')) {
+    point = '.';
     decimal = integer.slice(integer.indexOf('.') + 1);
     integer = integer.slice(0, integer.indexOf('.'));
   }
@@ -231,11 +235,7 @@ function formatNumberString (nStr) {
   if (isNegative) integer = `-${integer}`;
 
   // Add the decimal part if it exists
-  if (decimal != '') {
-    integer += `.${decimal}`;
-  }
-
-  return integer;
+  return `${integer}${point}${decimal}`;
 }
 
 function deselectKeys() {
