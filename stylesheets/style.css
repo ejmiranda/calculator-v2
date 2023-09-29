@@ -1,4 +1,4 @@
-/* On iPhone */
+/* On iPhone (Portrait) */
 @media only screen and (max-width: 400px) {
   html {
     /* No scroll */
@@ -9,6 +9,8 @@
   
   #calculator {
     margin: 0 0 90px 0;
+    position: fixed;
+    left: 5px;
   }
 }
 
