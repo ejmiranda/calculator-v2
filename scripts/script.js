@@ -10,7 +10,8 @@ let result = '';
 let hasDot = false;
 let isNegative = false;
 
-window.addEventListener('load', clear('AC'));
+// window.addEventListener('load', clear('AC'));
+window.addEventListener('load', formatNumberString('-140000000000.289'));
 
 keys.forEach(key => {
   key.addEventListener('click', setCalculation);
@@ -196,15 +197,42 @@ function Calculator() {
     '+/-': (n1) => n1 * -1,
   }
   this.calculate = (n1, sign, n2) => {
-    let result = 0;
-    result = this.operations[sign](+n1, +n2)
-    return result;
+    return this.operations[sign](+n1, +n2)
   }
 }
 
 function getCalculation(n1, sign, n2) {
   let calc = new Calculator();
-  return calc.calculate(n1, sign, n2);
+  let result = calc.calculate(n1, sign, n2); 
+  if (result == 'Infinity' || isNaN(result)) {
+    result = 'Error';
+  }
+  return result;
+}
+
+function formatNumberString (nStr) {
+  let isNegative = nStr.startsWith('-');
+  let integer = (isNegative) ? nStr.slice(1) : nStr;
+  let decimal = '';
+
+  // Check for decimal point and split the string if found
+  if (integer.includes('.')) {
+    decimal = integer.slice(integer.indexOf('.') + 1);
+    integer = integer.slice(0, integer.indexOf('.'));
+  }
+
+  // Add ',' as thousands separator
+  let integerArr = integer.split('').reverse();
+  for (let i = 3; i < integerArr.length; i += 4) {
+    integerArr.splice(i, 0, ',')
+  }
+  integer = integerArr.reverse().join('');
+
+  // Add back '-' if is negative
+  if (isNegative) integer = `-${integer}`;
+
+  console.log(integer);
+  console.log(decimal);
 }
 
 function deselectKeys() {
