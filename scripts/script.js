@@ -10,8 +10,7 @@ let result = '';
 let hasDot = false;
 let isNegative = false;
 
-// window.addEventListener('load', clear('AC'));
-window.addEventListener('load', formatNumberString('-140000000000.289'));
+window.addEventListener('load', clear('AC'));
 
 keys.forEach(key => {
   key.addEventListener('click', setCalculation);
@@ -57,7 +56,7 @@ function setCalculation(event) {
         case 'pre-sign':
           n1 += key.textContent;
           n2 = n1;
-          display.textContent = n1;
+          display.textContent = formatNumberString(n1);
           break;
         case 'sign':
           deselectKeys();
@@ -231,8 +230,12 @@ function formatNumberString (nStr) {
   // Add back '-' if is negative
   if (isNegative) integer = `-${integer}`;
 
-  console.log(integer);
-  console.log(decimal);
+  // Add the decimal part if it exists
+  if (decimal != '') {
+    integer += `.${decimal}`;
+  }
+
+  return integer;
 }
 
 function deselectKeys() {
