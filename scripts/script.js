@@ -121,6 +121,7 @@ function setCalculation(event) {
               result = getCalculation(n2, key.textContent);
               n2 = result;
           }
+          hasDot = hasDecimals(result);
           display.textContent = result;
           break;
       }
@@ -145,6 +146,11 @@ function setCalculation(event) {
   console.log(`---------------`);
 }
 
+function getCalculation(n1, sign, n2) {
+  let calc = new Calculator();
+  return calc.calculate(n1, sign, n2);
+}
+
 function Calculator() {
   this.operations = {
     '+': (n1, n2) => n1 + n2,
@@ -159,11 +165,6 @@ function Calculator() {
     result = this.operations[sign](+n1, +n2)
     return result;
   }
-}
-
-function getCalculation(n1, sign, n2) {
-  let calc = new Calculator();
-  return calc.calculate(n1, sign, n2);
 }
 
 function deselectKeys() {
@@ -208,6 +209,10 @@ function clear(type) {
       break;
   }
   display.textContent = '0';
+}
+
+function hasDecimals(number) {
+  return (+number % 1 != 0);
 }
 
 // const displayText = document.getElementById('display-text');
