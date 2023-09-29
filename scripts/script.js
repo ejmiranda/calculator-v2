@@ -8,6 +8,7 @@ let sign = '';
 let n2 = '0';
 let result = '';
 let hasDot = false;
+let isNegative = false;
 
 window.addEventListener('load', clear('AC'));
 
@@ -33,8 +34,8 @@ function setCalculation(event) {
 
       // No multiple zeros before decimal point
       if (key.textContent === '0') {
-        if ((state === 'new' || state === 'pre-sign') && n1.slice(0,1) === '0') break;
-        if (state === 'post-sign' && n2.slice(0,1) === '0') {
+        if ((state === 'new' || state === 'pre-sign') && n1.length === 1 && n1.slice(0,1) === '0') break;
+        if (state === 'post-sign' && n2.length === 1 && n2.slice(0,1) === '0') {
           state = 'sign';
           break;
         }
@@ -46,6 +47,9 @@ function setCalculation(event) {
             n1 = '0';
           } else {
             n1 = '';
+          }
+          if (isNegative) {
+            n1 = `-${n1}`;
           }
           state = 'pre-sign';
           // Rollover to 'pre-sign'
@@ -61,9 +65,22 @@ function setCalculation(event) {
           } else {
             n2 = '';
           }
+          if (isNegative) {
+            n2 = `-${n2}`;
+            isNegative = false;
+          }
           state = 'post-sign';
           // Rollover to 'post-sign'
         case 'post-sign':
+          if (key.getAttribute('id') === 'dot' && n2.length === 1 && n2.slice(0,1) === '0') {
+            n2 = '0';
+          } else if (key.textContent != '0' && n2.length === 1 && n2.slice(0,1) === '0') {
+            n2 = '';
+          }
+
+          if (isNegative) {
+            n2 = `-${n2}`;
+          }
           n2 += key.textContent;
           display.textContent = n2;
           break;
@@ -86,11 +103,13 @@ function setCalculation(event) {
           // Rollover to 'sign'
         case 'sign':
           hasDot = false;
+          isNegative = false;
           sign = key.textContent;
           selectKey(sign);
           break;
         case 'post-sign':
           hasDot = false;
+          isNegative = false;
           result = getCalculation(n1, sign, n2);
           if (key.getAttribute('id') === 'equal') {
             deselectKeys();
@@ -111,6 +130,10 @@ function setCalculation(event) {
           clear(key.textContent);
           break;
         case 'pos-neg':
+          if (display.textContent === '0') {
+            display.textContent = '-0';
+            isNegative = true;
+          }
           
           break;
         case 'percentage':
