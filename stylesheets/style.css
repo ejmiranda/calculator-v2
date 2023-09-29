@@ -35,17 +35,20 @@ html {
   justify-content: center;
 }
 
-#display {
+#display-container {
   background-color: yellow;
   padding: 10px 15px;
+  height: 90px;
   width: 330px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-#display-text {
+#display {
   background-color: green;
   color: white;
   font-size: 90px;
-  text-align: right;
 }
 
 #keypad {

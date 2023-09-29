@@ -1,4 +1,4 @@
-const display = document.getElementById('display-text');
+const display = document.getElementById('display');
 const keys = document.querySelectorAll('button');
 const clearKey = document.getElementById('clear');
 
@@ -10,7 +10,24 @@ let result = '';
 let hasDot = false;
 let isNegative = false;
 
-window.addEventListener('load', clear('AC'));
+// window.addEventListener('load', clear('AC'));
+window.addEventListener('load', size);
+
+function size() {
+  let container = window.getComputedStyle(display.parentNode, null);
+  let text = window.getComputedStyle(display, null);
+  let canvas = document.createElement('canvas');
+  let context = canvas.getContext("2d");
+  context.font = `${text.fontSize} ${text.fontFamily}`;
+  let containerWidth = Math.floor(container.width.slice(0,container.width.length - 2));
+  let textWidth = Math.floor(text.width.slice(0, text.width.length - 2));
+  console.log(containerWidth);
+  console.log(textWidth);
+  if (textWidth >= containerWidth) {
+    //Reduce font
+    console.log('overflow');
+  } 
+}
 
 keys.forEach(key => {
   key.addEventListener('click', setCalculation);
@@ -178,13 +195,14 @@ function setCalculation(event) {
       //     break;
       // }
   }
-  console.log(`state = \'${state}\'`);
-  console.log(`n1 = \'${n1}\'`);
-  console.log(`sign is \'${sign}\'`);
-  console.log(`n2 = \'${n2}\'`);
-  console.log(`result = \'${result}\'`);
-  console.log(`hasDot = ${hasDot}`);
-  console.log(`---------------`);
+  // console.log(`state = \'${state}\'`);
+  // console.log(`n1 = \'${n1}\'`);
+  // console.log(`sign is \'${sign}\'`);
+  // console.log(`n2 = \'${n2}\'`);
+  // console.log(`result = \'${result}\'`);
+  // console.log(`hasDot = ${hasDot}`);
+  // console.log(`---------------`);
+  size();
 }
 
 function Calculator() {
