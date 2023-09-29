@@ -154,6 +154,7 @@ function setCalculation(event) {
             case 'pre-sign':
               result = getCalculation(n1, key.textContent);
               n1 = result;
+              n2 = n1;
             case 'sign':
               break;
             case 'post-sign':
