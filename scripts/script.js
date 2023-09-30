@@ -25,7 +25,9 @@ function size() {
   console.log(textWidth);
   if (textWidth >= containerWidth) {
     //Reduce font
-    console.log('overflow');
+    console.log(display.style.fontSize);
+    console.log(text.fontSize);
+    display.style.fontSize = '80%'; // 90, 75, 60, 55
   } 
 }
 
