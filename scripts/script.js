@@ -14,20 +14,21 @@ let isNegative = false;
 window.addEventListener('load', size);
 
 function size() {
-  let container = window.getComputedStyle(display.parentNode, null);
   let text = window.getComputedStyle(display, null);
-  let canvas = document.createElement('canvas');
-  let context = canvas.getContext("2d");
-  context.font = `${text.fontSize} ${text.fontFamily}`;
+  let container = window.getComputedStyle(display.parentNode, null);
+  // let canvas = document.createElement('canvas');
+  // let context = canvas.getContext("2d");
+  // context.font = `${text.fontSize} ${text.fontFamily}`;
+  // let textWidth = Math.floor(context.measureText(display.textContent).width);
+  let textWidth = Math.floor(text.width.slice(0,text.width.length - 2));
   let containerWidth = Math.floor(container.width.slice(0,container.width.length - 2));
-  let textWidth = Math.floor(text.width.slice(0, text.width.length - 2));
-  console.log(containerWidth);
   console.log(textWidth);
+  console.log(containerWidth);
   if (textWidth >= containerWidth) {
     //Reduce font
-    console.log(display.style.fontSize);
+    display.style.fontSize = '75px'; // 90, 75, 60, 55
+    // Math.min(max_width/width, max_height/height)+"em");
     console.log(text.fontSize);
-    display.style.fontSize = '80%'; // 90, 75, 60, 55
   } 
 }
 
