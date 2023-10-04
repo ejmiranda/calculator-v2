@@ -26,7 +26,7 @@ function setInput(event) {
         case 'pre-sign':
           n1 = cleanNumStr(n1 + value);
           n2 = n1;
-          display.textContent = n1;
+          display.textContent = prepForDisplay(n1);
           break;
         case 'sign': // state
           state = 'post-sign';
@@ -34,7 +34,7 @@ function setInput(event) {
         case 'post-sign':
           n2 = cleanNumStr(n2 + value);
           deselectKeys();
-          display.textContent = n2;
+          display.textContent = prepForDisplay(n2);
           break;
       }
       break;
