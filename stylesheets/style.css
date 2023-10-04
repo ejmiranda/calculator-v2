@@ -7,6 +7,11 @@
     overscroll-behavior: none;
   }
   
+  #background {
+    display: flex;
+    align-items: flex-end;
+  }
+
   #calculator {
     margin: 0 0 90px 0;
     position: fixed;
@@ -16,10 +21,13 @@
 
 /* On desktop */
 @media only screen and (min-width: 400px) {
-  #calculator {
-    margin: 0 0 20px 0;
+  #background {
+    display: flex;
+    align-items: center;
   }
 }
+
+/* On both */
 
 html {
   background-color: black;
@@ -30,8 +38,6 @@ html {
 #background {
   background-color: black;
   height: 100vh;
-  display: flex;
-  align-items: flex-end;
   justify-content: center;
 }
 
