@@ -8,6 +8,6 @@
 - From The Odin Project's [Curriculum](https://www.theodinproject.com/lessons/foundations-calculator).
 - Create a basic calculator.
 - Work with integers and floating point numbers.
-- Support operation chaining and keyboard input.
+- Support operation chaining.
 - Implement `AC/C`, `+/-`, `%`.
 - iOS calculator style (2023).
