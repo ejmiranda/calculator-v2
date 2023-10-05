@@ -142,7 +142,8 @@ function splitNumStr(numStr) {
 
 function prepForDisplay(numStr) {
   let nStr = splitNumStr(numStr);
-  let formattedNumStr = `${addThousands(nStr.integer, ',')}${nStr.decimal}`; 
+  let formattedNumStr = (numStr.includes('e')) ? 
+    `${nStr.integer}${nStr.decimal}` : `${addThousands(nStr.integer, ',')}${nStr.decimal}`; 
   adjustDisplaySize(formattedNumStr);
   return formattedNumStr;
 }
