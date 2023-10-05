@@ -11,8 +11,19 @@ keys.forEach(key => {
   key.addEventListener('click', setInput);
 });
 
+// Deactivate key after the longest transition ends
+keys.forEach((key) => {
+  key.addEventListener('transitionend', (event) => {
+    console.log(event);
+    if(event.propertyName === 'background-color') {
+      key.classList.remove('down');
+    }
+  });
+});
+
 function setInput(event) {
   let key = event.target;
+  key.classList.add('down');
   let type = key.classList[0];
   let value = key.textContent;
   switch(type) {
