@@ -104,12 +104,12 @@ function setInput(event) {
       }
       break;
   }
-  console.log(`Key = \'${value}\'`);
-  console.log(`'${state}\'`);
-  console.log(`n1 = \'${n1}\'`);
-  console.log(`sign is \'${sign}\'`);
-  console.log(`n2 = \'${n2}\'`);
-  console.log(`---------------`);
+  // console.log(`Key = \'${value}\'`);
+  // console.log(`'${state}\'`);
+  // console.log(`n1 = \'${n1}\'`);
+  // console.log(`sign is \'${sign}\'`);
+  // console.log(`n2 = \'${n2}\'`);
+  // console.log(`---------------`);
 }
 
 function cleanNumStr(numStr) {
@@ -142,7 +142,9 @@ function splitNumStr(numStr) {
 
 function prepForDisplay(numStr) {
   let nStr = splitNumStr(numStr);
-  return `${addThousands(nStr.integer, ',')}${nStr.decimal}`;
+  let formattedNumStr = `${addThousands(nStr.integer, ',')}${nStr.decimal}`; 
+  adjustDisplaySize(formattedNumStr);
+  return formattedNumStr;
 }
 
 function addThousands(integerStr, separator) {
@@ -155,6 +157,36 @@ function addThousands(integerStr, separator) {
 
 function removeThousands(numStr) {
   return numStr.replace(/,/g, '');
+}
+
+function adjustDisplaySize(formattedNumStr) {
+  let containerStyle = window.getComputedStyle(display.parentNode, null);
+  let containerWidth = numFromStrWithoutUnit(containerStyle.width, 'px');
+  let initFontSize = numFromStrWithoutUnit(containerStyle.fontSize, 'px');
+
+  // This calculates the width a text would have by using the text, font size and font family.
+  // The difference with the width on the computed style is that the text does not need to be on screen. 
+  let canvas = document.createElement('canvas');
+  let context = canvas.getContext("2d");
+  context.font = `${containerStyle.fontSize} ${containerStyle.fontFamily}`;
+  let textWidth = Math.floor(context.measureText(formattedNumStr).width);
+
+  if (textWidth > containerWidth) {
+    let newFontSize;
+    for (let i = initFontSize - 1; i > 0; i--) {
+      newFontSize = i;
+      context.font = `${newFontSize}px ${containerStyle.fontFamily}`;
+      textWidth = Math.floor(context.measureText(formattedNumStr).width);
+      if (textWidth <= containerWidth) break;
+    }
+    display.style.fontSize = `${newFontSize}px`;
+  } else {
+    display.style.fontSize = `${initFontSize}px`;
+  }
+}
+
+function numFromStrWithoutUnit(numStr, unit) {
+  return +numStr.slice(0, numStr.length - unit.length);
 }
 
 function selectKey(sign) {
@@ -234,4 +266,5 @@ function clear(value) {
       break;
   }
   display.textContent = '0';
+  adjustDisplaySize('0');
 }

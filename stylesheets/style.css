@@ -42,7 +42,7 @@ html {
 }
 
 #display-container {
-  /* background-color: yellow; */
+  background-color: yellow;
   padding: 10px 15px;
   font-size: 90px;
   height: 90px;
@@ -53,7 +53,7 @@ html {
 }
 
 #display {
-  /* background-color: green; */
+  background-color: green;
   color: white;
   font-size: inherit;
 }
