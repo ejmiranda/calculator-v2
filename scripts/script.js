@@ -2,7 +2,7 @@ const display = document.getElementById('display');
 const keys = document.querySelectorAll('button');
 const clearKey = document.getElementById('clear');
 
-let state = 'new'; // , 'pre-sign', 'sign' and 'post-sign'
+let state = 'new'; // , 'pre-sign', 'sign' and 'post-sign'.
 let n1 = '';
 let sign = '';
 let n2 = '';
@@ -11,7 +11,7 @@ keys.forEach(key => {
   key.addEventListener('click', setInput);
 });
 
-// Deactivate key after the longest transition ends
+// Removes the 'down' class after the transitions ends.
 keys.forEach((key) => {
   key.addEventListener('transitionend', (event) => {
     console.log(event);
@@ -28,7 +28,7 @@ function setInput(event) {
   let value = key.textContent;
   switch(type) {
     case 'number':
-      // The only keys that change AC -> C are the numbers
+      // The only keys that change AC -> C are the numbers.
       clearKey.textContent = 'C';
       switch (state) {
         case 'new':
@@ -51,7 +51,7 @@ function setInput(event) {
       break;
     case 'sign': // key type
       if (value === '=') {
-        // If '=' is pressed before a number, do nothing;
+        // If '=' is pressed before a number, do nothing.
         if (sign === '') {
           break;
         }
@@ -167,12 +167,13 @@ function addThousands(integerStr, separator) {
   return integerArr.reverse().join('');
 }
 
+// Not used in this iteration of the code, but handy to keep around.
 function removeThousands(numStr) {
   return numStr.replace(/,/g, '');
 }
 
 function adjustDisplaySize(formattedNumStr) {
-  let containerStyle = window.getComputedStyle(display.parentNode, null);
+  let containerStyle = window.getComputedStyle(display.parentNode, null); // Container has the font size in CSS file.
   let containerWidth = numFromStrWithoutUnit(containerStyle.width, 'px');
   let initFontSize = numFromStrWithoutUnit(containerStyle.fontSize, 'px');
 
@@ -231,14 +232,6 @@ function getResultStr(n1, sign, n2) {
   return result.toString();
 }
 
-function getDecimalQty(numStr) {
-  let qty = 0;
-  if (numStr != undefined && numStr.includes('.')) {
-    qty = numStr.slice(numStr.indexOf('.') + 1).length;
-  }
-  return qty;
-}
-
 function Calculator() {
   this.operations = {
     '+': (a, b) => a + b,
@@ -251,6 +244,14 @@ function Calculator() {
   this.calculate = (a, sign, b) => {
     return this.operations[sign](+a, +b)
   }
+}
+
+function getDecimalQty(numStr) {
+  let qty = 0;
+  if (numStr != undefined && numStr.includes('.')) {
+    qty = numStr.slice(numStr.indexOf('.') + 1).length;
+  }
+  return qty;
 }
 
 function clear(value) {
