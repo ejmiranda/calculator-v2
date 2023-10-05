@@ -89,7 +89,7 @@ html {
 }
 
 #numbers {
-  width: 273px;
+  width: 261px;
   display: flex;
   flex-wrap: wrap-reverse;
   justify-content: center;
