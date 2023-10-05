@@ -41,11 +41,17 @@ html {
   justify-content: center;
 }
 
+#calculator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 #display-container {
-  padding: 10px 15px;
   font-size: 90px;
   height: 90px;
-  width: 330px;
+  padding: 0 0 15px 0;
+  width: 315px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -58,6 +64,7 @@ html {
 
 #keypad {
   display: flex;
+  justify-content: center;
 }
 
 #special-functions {
