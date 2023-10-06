@@ -7,6 +7,12 @@ let n1 = '';
 let sign = '';
 let n2 = '';
 
+
+// Whenever the device orientation changes.
+window.addEventListener('resize', () => {
+  adjustDisplaySize(display.textContent);
+})
+
 keys.forEach(key => {
   key.addEventListener('click', setInput);
 });
