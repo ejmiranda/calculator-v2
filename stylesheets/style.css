@@ -8,6 +8,7 @@ html {
   background-color: black;
   box-sizing: border-box;
   font-family: 'SF-Pro-Display-Regular', Arial, Helvetica, sans-serif;
+  overflow: hidden;
   overscroll-behavior: none;
 }
 
