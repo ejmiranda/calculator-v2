@@ -153,6 +153,11 @@ function splitNumStr(numStr) {
 }
 
 function prepForDisplay(numStr) {
+  if (numStr === 'Error') {
+
+  } else {
+    
+  }
   let nStr = splitNumStr(numStr);
   let formattedNumStr = (numStr.includes('e')) ? 
     `${nStr.integer}${nStr.decimal}` : `${addThousands(nStr.integer, ',')}${nStr.decimal}`; 
