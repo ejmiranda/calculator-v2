@@ -136,33 +136,40 @@ function cleanNumStr(numStr) {
     nStr.decimal = nStr.decimal.slice(0, nStr.decimal.length - 1);
   }
 
-  return `${nStr.integer}${nStr.decimal}`;
+  return `${nStr.sign}${nStr.integer}${nStr.decimal}`;
 }
 
 // Returns an object with an integer and decimal part (if there's any).
 function splitNumStr(numStr) {
   let nStr = {
+    sign: '',
     integer: numStr,
     decimal: ''
   }
-  if (numStr.includes('.')) { 
-    nStr.integer = numStr.slice(0, numStr.indexOf('.'));
-    nStr.decimal = numStr.slice(numStr.indexOf('.')); //Includes the decimal point.
+
+  if (nStr.integer.startsWith('-')) {
+    nStr.sign = '-';
+    nStr.integer = nStr.integer.slice(1);
   }
+
+  if (nStr.integer.includes('.')) { 
+    nStr.decimal = nStr.integer.slice(nStr.integer.indexOf('.')); //Includes the decimal point.
+    nStr.integer = nStr.integer.slice(0, nStr.integer.indexOf('.'));
+  }
+
   return nStr;
 }
 
 function prepForDisplay(numStr) {
   if (numStr === 'Error') {
-
+    return numStr;
   } else {
-    
+    let nStr = splitNumStr(numStr);
+    let formattedNumStr = (numStr.includes('e')) ? 
+      `${nStr.sign}${nStr.integer}${nStr.decimal}` : `${nStr.sign}${addThousands(nStr.integer, ',')}${nStr.decimal}`; 
+    adjustDisplaySize(formattedNumStr);
+    return formattedNumStr;
   }
-  let nStr = splitNumStr(numStr);
-  let formattedNumStr = (numStr.includes('e')) ? 
-    `${nStr.integer}${nStr.decimal}` : `${addThousands(nStr.integer, ',')}${nStr.decimal}`; 
-  adjustDisplaySize(formattedNumStr);
-  return formattedNumStr;
 }
 
 function addThousands(integerStr, separator) {
