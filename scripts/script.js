@@ -7,7 +7,6 @@ let n1 = '0';
 let sign = '';
 let n2 = '0';
 
-
 // Whenever the device orientation changes.
 window.addEventListener('resize', () => {
   adjustDisplaySize(display.textContent);
@@ -128,6 +127,20 @@ function setInput(event) {
   console.log(`---------------`);
 }
 
+function getDigitQty(numStr) {
+  return getIntegerQty(numStr) + getDecimalQty(numStr);
+}
+
+function getIntegerQty(numStr) {
+  let nStr = splitNumStr(numStr);
+  return nStr.integer.length;
+}
+
+function getDecimalQty(numStr) {
+  let nStr = splitNumStr(numStr);
+  return nStr.decimal.length;
+}
+
 function cleanNumStr(numStr) {
   let nStr = splitNumStr(numStr);
 
@@ -145,7 +158,6 @@ function cleanNumStr(numStr) {
 
 // Returns an object with an integer and decimal part (if there's any).
 function splitNumStr(numStr) {
-  
   let nStr = {
     sign: '',
     integer: '',
@@ -227,18 +239,18 @@ function numFromStrWithoutUnit(numStr, unit) {
   return +numStr.slice(0, numStr.length - unit.length);
 }
 
+function deselectKeys() {
+  keys.forEach(key => {
+    key.classList.remove('selected');
+  });
+}
+
 function selectKey(sign) {
   deselectKeys();
   keys.forEach(key => {
     if (key.textContent === sign) {
       key.classList.add('selected');
     }
-  });
-}
-
-function deselectKeys() {
-  keys.forEach(key => {
-    key.classList.remove('selected');
   });
 }
 
@@ -266,6 +278,7 @@ function getResultStr(n1, sign, n2) {
   if (result === 'Infinity') {
     result = 'Error';
   }
+
   return result;
 }
 
@@ -281,20 +294,6 @@ function Calculator() {
   this.calculate = (a, sign, b) => {
     return this.operations[sign](+a, +b);
   }
-}
-
-function getIntegerQty(numStr) {
-  let nStr = splitNumStr(numStr);
-  return nStr.integer.length;
-}
-
-function getDecimalQty(numStr) {
-  let nStr = splitNumStr(numStr);
-  return nStr.decimal.length;
-}
-
-function getDigitQty(numStr) {
-  return getIntegerQty(numStr) + getDecimalQty(numStr);
 }
 
 function clear(value) {
