@@ -11,7 +11,7 @@ let n2 = '';
 // Whenever the device orientation changes.
 window.addEventListener('resize', () => {
   adjustDisplaySize(display.textContent);
-})
+});
 
 keys.forEach(key => {
   key.addEventListener('click', setInput);
@@ -36,17 +36,23 @@ function setInput(event) {
           state = 'pre-sign';
           n1 = '';
         case 'pre-sign':
-          n1 = cleanNumStr(n1 + value);
-          n2 = n1;
-          display.textContent = prepForDisplay(n1);
+          // Accepts a maximum of 9 digits, regardless of ',' and '.'.
+          if (getDigitQty(cleanNumStr(n1 + value)) <= 9) {
+            n1 = cleanNumStr(n1 + value);
+            n2 = n1;
+            display.textContent = prepForDisplay(n1);
+          }
           break;
         case 'sign': // state
           state = 'post-sign';
           n2 = '';
         case 'post-sign':
-          n2 = cleanNumStr(n2 + value);
-          deselectKeys();
-          display.textContent = prepForDisplay(n2);
+          // Accepts a maximum of 9 digits, regardless of ',' and '.'.
+          if (getDigitQty(cleanNumStr(n2 + value)) < 9) {
+            n2 = cleanNumStr(n2 + value);
+            deselectKeys();
+            display.textContent = prepForDisplay(n2);
+          }
           break;
       }
       break;
@@ -265,6 +271,14 @@ function getDecimalQty(numStr) {
     qty = numStr.slice(numStr.indexOf('.') + 1).length;
   }
   return qty;
+}
+
+function getDigitQty(numStr) {
+  let nStr = splitNumStr(numStr);
+  if (nStr != '') {
+    nStr.decimal = nStr.decimal.slice(1);
+  }
+  return nStr.integer.length + (nStr.decimal.length);
 }
 
 function clear(value) {
