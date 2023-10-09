@@ -48,7 +48,7 @@ function setInput(event) {
           n2 = '';
         case 'post-sign':
           // Accepts a maximum of 9 digits, regardless of ',' and '.'.
-          if (getDigitQty(cleanNumStr(n2 + value)) < 9) {
+          if (getDigitQty(cleanNumStr(n2 + value)) <= 9) {
             n2 = cleanNumStr(n2 + value);
             deselectKeys();
             display.textContent = prepForDisplay(n2);
@@ -122,12 +122,12 @@ function setInput(event) {
       }
       break;
   }
-  // console.log(`Key = \'${value}\'`);
-  // console.log(`'${state}\'`);
-  // console.log(`n1 = \'${n1}\'`);
-  // console.log(`sign is \'${sign}\'`);
-  // console.log(`n2 = \'${n2}\'`);
-  // console.log(`---------------`);
+  console.log(`Key = \'${value}\'`);
+  console.log(`'${state}\'`);
+  console.log(`n1 = \'${n1}\'`);
+  console.log(`sign is \'${sign}\'`);
+  console.log(`n2 = \'${n2}\'`);
+  console.log(`---------------`);
 }
 
 function cleanNumStr(numStr) {
@@ -243,6 +243,13 @@ function getResultStr(n1, sign, n2) {
     let decimalQty = Math.max(getDecimalQty(n1), getDecimalQty(n2));
     if (decimalQty > 0) {
       result = result.toFixed(decimalQty);
+    } 
+  }
+  // Converts to exponential notation if result is above 9 numerical digits.
+  if (getDigitQty(result.toString()) > 9) {
+    result = result.toExponential(0);
+    if (result.includes('+')) {
+      result = result.slice(0, result.indexOf('+')) + result.slice(result.indexOf('+') + 1);
     }
   }
   if (result == 'Infinity' || isNaN(result)) {
@@ -261,7 +268,7 @@ function Calculator() {
     '+/-': (a) => a * -1,
   }
   this.calculate = (a, sign, b) => {
-    return this.operations[sign](+a, +b)
+    return this.operations[sign](+a, +b);
   }
 }
 
