@@ -3,9 +3,9 @@ const keys = document.querySelectorAll('button');
 const clearKey = document.getElementById('clear');
 
 let state = 'new'; // , 'pre-sign', 'sign' and 'post-sign'.
-let n1 = '';
+let n1 = '0';
 let sign = '';
-let n2 = '';
+let n2 = '0';
 
 
 // Whenever the device orientation changes.
@@ -66,9 +66,7 @@ function setInput(event) {
         state = 'post-sign';
       }
       switch (state) {
-        case 'new':
-          n1 = '0';
-          n2 = '0';
+        case 'new': // Exists to catch it. Happens during chaining.
         case 'pre-sign':
           state = 'sign';
         case 'sign': // state
@@ -138,29 +136,37 @@ function cleanNumStr(numStr) {
   nStr.integer = (+nStr.integer).toString();
 
   // Removes additional decimal points.
-  if (nStr.decimal.length > 1 && nStr.decimal.endsWith('.')) {
+  if (nStr.point === '.' && nStr.decimal.endsWith('.')) {
     nStr.decimal = nStr.decimal.slice(0, nStr.decimal.length - 1);
   }
 
-  return `${nStr.sign}${nStr.integer}${nStr.decimal}`;
+  return `${nStr.sign}${nStr.integer}${nStr.point}${nStr.decimal}`;
 }
 
 // Returns an object with an integer and decimal part (if there's any).
 function splitNumStr(numStr) {
+  
   let nStr = {
     sign: '',
-    integer: numStr,
+    integer: '',
+    point: '',
     decimal: ''
   }
 
-  if (nStr.integer.startsWith('-')) {
-    nStr.sign = '-';
-    nStr.integer = nStr.integer.slice(1);
-  }
+  if (numStr != undefined) {
+    nStr.integer = numStr;
 
-  if (nStr.integer.includes('.')) { 
-    nStr.decimal = nStr.integer.slice(nStr.integer.indexOf('.')); //Includes the decimal point.
-    nStr.integer = nStr.integer.slice(0, nStr.integer.indexOf('.'));
+    if (nStr.integer.startsWith('-')) {
+      nStr.sign = '-';
+      nStr.integer = nStr.integer.slice(1);
+    }
+  
+    if (nStr.integer.includes('.')) { 
+      nStr.point = '.';
+      nStr.decimal = nStr.integer.slice(nStr.integer.indexOf('.') + 1);
+      nStr.integer = nStr.integer.slice(0, nStr.integer.indexOf('.'));
+    }
+
   }
 
   return nStr;
@@ -172,7 +178,7 @@ function prepForDisplay(numStr) {
   } else {
     let nStr = splitNumStr(numStr);
     let formattedNumStr = (numStr.includes('e')) ? 
-      `${nStr.sign}${nStr.integer}${nStr.decimal}` : `${nStr.sign}${addThousands(nStr.integer, ',')}${nStr.decimal}`; 
+      `${nStr.sign}${nStr.integer}${nStr.point}${nStr.decimal}` : `${nStr.sign}${addThousands(nStr.integer, ',')}${nStr.point}${nStr.decimal}`; 
     adjustDisplaySize(formattedNumStr);
     return formattedNumStr;
   }
@@ -238,24 +244,29 @@ function deselectKeys() {
 
 function getResultStr(n1, sign, n2) {
   let calc = new Calculator();
-  let result = calc.calculate(n1, sign, n2);
+  let result = calc.calculate(n1, sign, n2).toString();
+
+  // Produces a result with the max number of decimals of the operands.
   if (sign != '%') {
     let decimalQty = Math.max(getDecimalQty(n1), getDecimalQty(n2));
-    if (decimalQty > 0) {
-      result = result.toFixed(decimalQty);
+    if (result != '0' && decimalQty > 0) {
+      result = (+result).toFixed(decimalQty);
     } 
   }
-  // Converts to exponential notation if result is above 9 numerical digits.
-  if (getDigitQty(result.toString()) > 9) {
-    result = result.toExponential(0);
-    if (result.includes('+')) {
-      result = result.slice(0, result.indexOf('+')) + result.slice(result.indexOf('+') + 1);
-    }
+
+  if (getDigitQty(result) > 9) {
+    result = (+result).toPrecision(9);
   }
-  if (result == 'Infinity' || isNaN(result)) {
+  
+  // Removes the '+' sign from the exponential notation (if there's any)
+  if (result.toString().includes('+')) {
+    result = result.slice(0, result.indexOf('+')) + result.slice(result.indexOf('+') + 1);
+  }
+
+  if (result === 'Infinity') {
     result = 'Error';
   }
-  return result.toString();
+  return result;
 }
 
 function Calculator() {
@@ -272,20 +283,18 @@ function Calculator() {
   }
 }
 
+function getIntegerQty(numStr) {
+  let nStr = splitNumStr(numStr);
+  return nStr.integer.length;
+}
+
 function getDecimalQty(numStr) {
-  let qty = 0;
-  if (numStr != undefined && numStr.includes('.')) {
-    qty = numStr.slice(numStr.indexOf('.') + 1).length;
-  }
-  return qty;
+  let nStr = splitNumStr(numStr);
+  return nStr.decimal.length;
 }
 
 function getDigitQty(numStr) {
-  let nStr = splitNumStr(numStr);
-  if (nStr != '') {
-    nStr.decimal = nStr.decimal.slice(1);
-  }
-  return nStr.integer.length + (nStr.decimal.length);
+  return getIntegerQty(numStr) + getDecimalQty(numStr);
 }
 
 function clear(value) {

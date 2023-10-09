@@ -13,7 +13,7 @@ html {
 }
 
 #background {
-  height: 100vh;
+  height: 100dvh;
   touch-action: none;
   display: flex;
   align-items: flex-end;
@@ -21,7 +21,7 @@ html {
 }
 
 #calculator {
-  margin: 0 0 90px 5px;
+  margin: 0 0 10px 5px;
   display: flex;
   align-items: center;
   flex-direction: column;
